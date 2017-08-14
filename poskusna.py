@@ -56,6 +56,7 @@ class Igra:
             print('res sem')
             return True
             
+            
     def shrani_kanvas(self):
         self.koncne_tocke.extend(self.tocke)
         #pobarvaj jih rumeno
@@ -138,6 +139,7 @@ class Igra:
             print('fiksen')
             igra.shrani_kanvas()
             igra.naredi_nov_objekt()
+            self.polna_vrstica()
             
     def zavrti(self):
         if igra.lahko_zavrtim() == True:
@@ -220,5 +222,28 @@ class Igra:
                     return False
         elif self.število == 4:
             return True
-                
-igra = Igra(8,8)
+        
+    def polna_vrstica(self):
+        print(self.koncne_tocke)
+        for številka in range(self.visina):
+            print(številka) 
+            števec = 0
+            koncne_tocke = self.koncne_tocke
+            self.koncne_tocke = []
+            for tocka in koncne_tocke:
+                if tocka[1] == številka:
+                    števec += 1
+            if števec == self.sirina:
+                for tocka in koncne_tocke:
+                    if tocka[1] == številka:
+                        del tocka
+                    elif tocka[1] < številka:
+                        tocka = (tocka[0], tocka[1] + 1)
+                        self.koncne_tocke.append(tocka)
+                    else:
+                        self.koncne_tocke.append(tocka)
+            else:
+                self.koncne_tocke = koncne_tocke
+        print(self.koncne_tocke)
+            
+igra = Igra(6,5)
