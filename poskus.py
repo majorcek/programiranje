@@ -1,16 +1,15 @@
 import random
-# TO DO: SPODNJE TOČKE POBARVAJ
-#        Če uspe, vsak lik svoje barve
+# TO DO: popravi funkcijo self.fiksen()
 # dodaj še trikotno na obe strani in štirki z izrastkom
 
 
 class Igra:
-    def __init__(self, sirina = 20, visina = 20):
+    def __init__(self, sirina, visina):
         self.sirina = sirina
         self.visina = visina
         self.naredi_nov_objekt()
         self.koncne_tocke = []
-        #self.spodnje_tocke = []
+        self.rezultat = 0
         
     def __str__(self):
         polja = []
@@ -28,8 +27,7 @@ class Igra:
 
     def naredi_nov_objekt(self):
         self.število = random.randrange(1,15)
-        #self.število = 4
-        x = 4
+        x = 8
         self.polozaj = (x,0)
         self.postavitev = 0
         if self.število == 1: #enka
@@ -69,7 +67,7 @@ class Igra:
             self.velikost = 3
             self.spodnje_tocke = [(x,1),(x + 1,1),(x + 2, 1),(x,0)]
         elif self.število == 10: # mali L v desno z izrastkom
-            self.tocke = [(x,1),(x + 1,1),(x + 2, 1),(x,0), (x + 1,1)]
+            self.tocke = [(x,1),(x + 1,1),(x + 2, 1),(x,0), (x + 1,2)]
             self.velikost = 3
             self.spodnje_tocke = [(x,1),(x + 1,2),(x + 2, 1)]
         elif self.število == 11: # velik L v desno 
@@ -104,10 +102,9 @@ class Igra:
                 par = (par[0] + 1, par[1])
                 spodnje_tocke.append(par)
             self.spodnje_tocke = spodnje_tocke
-            if igra.fiksen() == True:
-                igra.shrani_kanvas()
-                igra.naredi_nov_objekt()
-        print(igra)
+            if self.fiksen() == True:
+                self.shrani_kanvas()
+                self.naredi_nov_objekt()
 
     def prosto_desno(self):
         x, y = self.polozaj
@@ -138,7 +135,6 @@ class Igra:
             if igra.fiksen() == True:
                 igra.shrani_kanvas()
                 igra.naredi_nov_objekt()
-        print(igra)
         
     def prosto_levo(self):
         x, y = self.polozaj
@@ -149,7 +145,6 @@ class Igra:
         if ja_ne == 1:
             return True
         else:
-            print(x,y,self.tocke)
             return False
 
     def premakni(self):
@@ -164,33 +159,32 @@ class Igra:
             par = (par[0], par[1] + 1)
             spodnje_tocke.append(par)
         self.spodnje_tocke = spodnje_tocke
-        if igra.fiksen() == True:
-            igra.shrani_kanvas()
-            igra.polna_vrstica()                
-            igra.naredi_nov_objekt()
-        print(igra)
+        if self.fiksen() == True:
+            self.rezultat += 10
+            self.shrani_kanvas()
+            self.polna_vrstica()                
+            self.naredi_nov_objekt()
         
     def fiksen(self):
         ja_ne = 0
-        števec = 0
+        #print(self.spodnje_tocke)
         for tocka in self.spodnje_tocke:            
-            if tocka[1] < self.visina - 1 and (tocka[0],tocka[1] + 1) not in self.koncne_tocke and ja_ne == 0:
-                #števec += 1
-                ja_ne = 0
-            else:
+            if tocka[1] == self.visina - 1 or (tocka[0],tocka[1] + 1) in self.koncne_tocke or ja_ne == 1:
                 ja_ne = 1
-        if ja_ne == 0: #števec == len(self.spodnje_tocke):
-            return False
-        else:     
-            return True         
+                return True 
+                print(ja_ne)
+            print(ja_ne)
+        if ja_ne == 0:
+            return False        
             
     def zavrti(self):
         x,y = self.polozaj
-        if igra.lahko_zavrtim() == True:
-            if self.število == 1: #enka
+        if self.lahko_zavrtim() == True:
+            #enka
+            if self.število == 1: 
                 pass
-            
-            elif self.število == 2: #dvojka
+            #dvojka
+            elif self.število == 2: 
                 if self.postavitev % 4 == 0:
                     self.tocke = [(x,y), (x,y + 1)]
                     self.spodnje_tocke = [(x,y + 1)]
@@ -204,8 +198,8 @@ class Igra:
                     self.tocke = [(x,y), (x + 1,y)]
                     self.spodnje_tocke = [(x,y),(x + 1,y)]
                 self.velikost = len(self.spodnje_tocke)
-                 
-            elif self.število == 3: #trojka
+            #trojka     
+            elif self.število == 3: 
                 if self.postavitev % 4 == 0:
                     self.tocke = [(x,y),(x,y + 1),(x,y + 2)]
                     self.spodnje_tocke = [(x,y + 2)]
@@ -219,8 +213,8 @@ class Igra:
                     self.tocke = [(x,y),(x + 1,y),(x + 2,y)]
                     self.spodnje_tocke = [(x,y),(x + 1,y),(x + 2,y)]
                 self.velikost = len(self.spodnje_tocke)
-                
-            elif self.število == 4: #štirka
+            #štirka    
+            elif self.število == 4: 
                 if self.postavitev % 4 == 0:
                     self.tocke = [(x,y),(x,y + 1),(x,y + 2),(x,y + 3)]
                     self.spodnje_tocke = [(x,y + 3)]
@@ -234,11 +228,11 @@ class Igra:
                     self.tocke = [(x,y),(x + 1,y),(x + 2,y),(x + 3,y)]
                     self.spodnje_tocke = [(x,y),(x + 1,y),(x + 2,y),(x + 3,y)]
                 self.velikost = len(self.spodnje_tocke)
-                
-            elif self.število == 5: #kvadrat
+            #kvadrat    
+            elif self.število == 5: 
                 pass
-            
-            elif self.število == 6: #kvadrat z izrastkom
+            #kvadrat z izrastkom
+            elif self.število == 6: 
                 if self.postavitev % 4 == 0:
                     self.tocke = [(x,y),(x,y + 1),(x,y + 2),(x + 1,y),(x + 1,y + 1)]
                     self.spodnje_tocke = [(x,y + 2),(x + 1,y + 1)]
@@ -252,8 +246,8 @@ class Igra:
                     self.tocke = [(x,y),(x + 1,y),(x + 2,y),(x,y - 1),(x + 1,y - 1)]
                     self.spodnje_tocke = [(x,y),(x + 1,y),(x + 2,y)]
                 self.velikost = len(self.spodnje_tocke)
-                
-            elif self.število == 7: # majhen L v levo
+            # majhen L v levo    
+            elif self.število == 7: 
                 if self.postavitev % 4 == 0:
                     self.tocke = [(x,y),(x,y + 1),(x,y + 2),(x + 1, y + 2)]
                     self.spodnje_tocke = [(x,y + 2),(x + 1,y + 2)]
@@ -267,8 +261,8 @@ class Igra:
                     self.tocke = [(x,y),(x + 1,y),(x + 2,y),(x + 2,y - 1)]
                     self.spodnje_tocke = [(x,y),(x + 1,y),(x + 2,y)]
                 self.velikost = len(self.spodnje_tocke)
-                
-            elif self.število == 8: # majhen L v levo z izrastkom
+            # majhen L v levo z izrastkom    
+            elif self.število == 8: 
                 if self.postavitev % 4 == 0:
                     self.tocke = [(x,y),(x,y + 1),(x,y + 2),(x + 1,y + 2),(x - 1,y + 1)]
                     self.spodnje_tocke = [(x - 1,y + 1),(x,y + 2),(x + 1,y + 2)]
@@ -282,8 +276,8 @@ class Igra:
                     self.tocke = [(x,y),(x + 1,y),(x + 2,y),(x + 2,y - 1),(x + 1,y + 1)]
                     self.spodnje_tocke = [(x,y),(x + 1,y + 1),(x + 2,y)]
                 self.velikost = len(self.spodnje_tocke)
-                
-            elif self.število == 9: #majhen L v desno
+            #majhen L v desno    
+            elif self.število == 9: 
                 if self.postavitev % 4 == 0:
                     self.tocke = [(x,y),(x,y + 1),(x,y + 2),(x + 1,y)]
                     self.spodnje_tocke = [(x,y + 2),(x + 1,y)]
@@ -297,8 +291,8 @@ class Igra:
                     self.tocke = [(x,y),(x + 1,y),(x + 2,y),(x,y - 1)]
                     self.spodnje_tocke = [(x,y),(x + 1,y),(x + 2,y)]
                 self.velikost = len(self.spodnje_tocke)
-                
-            elif self.število == 10: #majhen L v desno z izrastkom
+            #majhen L v desno z izrastkom    
+            elif self.število == 10: 
                 if self.postavitev % 4 == 0:
                     self.tocke = [(x,y),(x,y + 1),(x,y + 2),(x + 1,y),(x - 1, y + 1)]
                     self.spodnje_tocke = [(x - 1, y + 1),(x,y + 2),(x + 1,y)]
@@ -312,8 +306,8 @@ class Igra:
                     self.tocke = [(x,y),(x + 1,y),(x + 2,y),(x,y - 1),(x + 1, y + 1)]
                     self.spodnje_tocke = [(x,y),(x + 1,y + 1),(x + 2,y)]
                 self.velikost = len(self.spodnje_tocke)
-                
-            elif self.število == 11: # velik L v levo
+            # velik L v levo    
+            elif self.število == 11: 
                 if self.postavitev % 4 == 0:
                     self.tocke = [(x,y),(x,y + 1),(x,y + 2),(x,y + 3),(x + 1, y + 3)]
                     self.spodnje_tocke = [(x,y + 3),(x + 1,y + 3)]
@@ -325,21 +319,21 @@ class Igra:
                     self.spodnje_tocke = [(x,y),(x - 1,y - 3)]
                 else:
                     self.tocke = [(x,y),(x + 1,y),(x + 2,y),(x + 3,y),(x + 3,y - 1)]
-                    self.spodnje_tocke = [(x,y),(x + 1,y),(x + 3,y),(x + 3,y - 1)]
+                    self.spodnje_tocke = [(x,y),(x + 1,y),(x + 2,y),(x + 3,y)]
                 self.velikost = len(self.spodnje_tocke)
-                
-            elif self.število == 12: #velik L v desno
+            #velik L v desno    
+            elif self.število == 12: 
                 if self.postavitev % 4 == 0:
                     self.tocke = [(x,y),(x,y + 1),(x,y + 2),(x,y + 3),(x + 1,y)]
                     self.spodnje_tocke = [(x,y + 3),(x + 1,y)]
                 elif self.postavitev % 4 == 1:
-                    self.tocke = [(x,y),(x - 1,y),(x - 2,y),(x - 3,y)]
-                    self.spodnje_tocke = [(x, y),(x - 1,y),(x - 2,y),(x - 3,y + 1)]
+                    self.tocke = [(x,y + 1),(x,y),(x - 1,y),(x - 2,y),(x - 3,y)]
+                    self.spodnje_tocke = [(x,y + 1),(x - 1,y),(x - 2,y),(x - 3,y)]
                 elif self.postavitev % 4 == 2:
-                    self.tocke = [(x,y),(x,y - 1),(x,y - 2),(x,y - 3)]
-                    self.spodnje_tocke = [(x,y),(x - 1,y - 3)]
+                    self.tocke = [(x,y),(x,y - 1),(x,y - 2),(x,y - 3),(x - 1,y)]
+                    self.spodnje_tocke = [(x,y),(x - 1,y)]
                 else:
-                    self.tocke = [(x,y),(x + 1,y),(x + 2,y),(x + 3,y)]
+                    self.tocke = [(x,y),(x + 1,y),(x + 2,y),(x + 3,y),(x,y - 1)]
                     self.spodnje_tocke = [(x,y),(x + 1,y),(x + 2,y),(x + 3,y)]
                 self.velikost = len(self.spodnje_tocke)
             #kotna2
@@ -374,7 +368,7 @@ class Igra:
                 self.velikost = len(self.spodnje_tocke)         
 
             self.postavitev += 1
-            print(igra)
+            
         else:
             print('ne morem obrnit',self.polozaj)
         
@@ -642,10 +636,8 @@ class Igra:
                 else:
                     return False
             
-            
     def shrani_kanvas(self):
         self.koncne_tocke.extend(self.tocke)
-        #pobarvaj jih rumeno
                 
     def polna_vrstica(self):
         for številka in range(self.visina):
@@ -656,6 +648,7 @@ class Igra:
                 if tocka[1] == številka:
                     števec += 1
             if števec == self.sirina:
+                self.rezultat += 100
                 for tocka in koncne_tocke:
                     if tocka[1] == številka:
                         del tocka
@@ -674,9 +667,11 @@ class Igra:
             return True
         elif (11,0) in self.koncne_tocke and self.velikost == 3:
             return True
+        elif (12,0) in self.koncne_tocke and self.velikost == 4:
+            return True
         else:
             return False
 
             
             
-igra = Igra(10,7)
+#igra = Igra(18,30)

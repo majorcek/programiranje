@@ -1,20 +1,32 @@
 import tkinter as tk
 import poskus
 
-VELIKOST_POLJA = 10
+# TO DO: števec točk: vsaka kocka 10 točk, podrta vrstica 100 točk
+
+VELIKOST_POLJA = 20
 ODMIK = 5
 
 #koliko korakov naj naredi v sekundi
-HITROST = 3
+HITROST = 1
 
 
 class Tetris:
     def __init__(self, okno):
         #nastavimo model
-        self.igra = poskus.Igra(20,20)
+        self.igra = poskus.Igra(18,30)
         
         #pripravimo grafični vmesnik
         self.okno = okno
+        
+        self.semafor = tk.Canvas(
+            width = VELIKOST_POLJA * self.igra.sirina + 2 * ODMIK,
+            height = 60
+        )
+        self.semafor.create_text(50,50,fill = "darkblue",font = "Times 20 italic bold",
+                        text = 'Trenutni rezultat je 0 točk')
+        
+        self.semafor.pack()
+        
         self.igralna_plosca = tk.Canvas(
             width=VELIKOST_POLJA * self.igra.sirina + 2 * ODMIK,
             height=VELIKOST_POLJA * self.igra.visina + 2 * ODMIK
@@ -24,17 +36,36 @@ class Tetris:
 
         #zaženemo osnovno zanko igre
         self.osnovna_zanka()
-
+        
+                                 
     def osnovna_zanka(self):
         if self.igra.fiksen() == False:
-            self.igra.premakni()   
+            self.premakni()
+            self.osvezi_prikaz()
+            self.okno.after(int(1000 // HITROST), self.osnovna_zanka)
         else:
             self.igra.shrani_kanvas()
-            self.igra.polna_vrstica()
-            self.igra.naredi_nov_objekt()    
-        self.osvezi_prikaz()
-        self.okno.after(int(1000 // HITROST), self.osnovna_zanka)
+            if self.igra.konec() == True:
+                self.igralna_plosca.delete('all')
+                self.igralna_plosca.create_text(100,100,fill="darkblue",font="Times 20 italic bold",
+                        text="KONEC IGRE!")
+            else:
+                self.igra.polna_vrstica()
+                self.osvezi_semafor()
+                print('!')
+                self.naredi_nov_objekt()    
+                self.osvezi_prikaz()
+                self.okno.after(int(1000 // HITROST), self.osnovna_zanka)
      
+    def osvezi_semafor(self):
+        #mogoče je treba brez selfa
+        self.semafor.delete('all')
+        self.semafor.create_text(30,30,fill = "darkblue",font = "Times 20 italic bold",
+                                 text = 'Trenutni rezultat je: mlkmyxkc')
+        print('?')
+
+                        #text = 'Trenutni rezultat je:' + str(self.igra.rezultat))
+
     def osvezi_prikaz(self):
         self.igralna_plosca.delete('all')
         self.igralna_plosca.create_rectangle(
@@ -48,24 +79,19 @@ class Tetris:
                 ODMIK + VELIKOST_POLJA * x,
                 ODMIK + VELIKOST_POLJA * y,
                 ODMIK + VELIKOST_POLJA * x + VELIKOST_POLJA,
-                ODMIK + VELIKOST_POLJA * y + VELIKOST_POLJA
+                ODMIK + VELIKOST_POLJA * y + VELIKOST_POLJA,
+                fill = "orange"
             )
         for x,y in self.igra.koncne_tocke:
             self.igralna_plosca.create_oval(
                 ODMIK + VELIKOST_POLJA * x,
                 ODMIK + VELIKOST_POLJA * y,
                 ODMIK + VELIKOST_POLJA * x + VELIKOST_POLJA,
-                ODMIK + VELIKOST_POLJA * y + VELIKOST_POLJA
+                ODMIK + VELIKOST_POLJA * y + VELIKOST_POLJA,
+                fill = "darkgreen"
             )
             
-    def osvezi_prikaz_stari(self):
-        for x,y in self.igra.tocke:
-            self.igralna_plosca.create_oval(
-                ODMIK + VELIKOST_POLJA * x,
-                ODMIK + VELIKOST_POLJA * y,
-                ODMIK + VELIKOST_POLJA * x + VELIKOST_POLJA,
-                ODMIK + VELIKOST_POLJA * y + VELIKOST_POLJA
-            )
+
     def obdelaj_tipko(self,event):
         if event.keysym == 'Right':
             self.desno()
