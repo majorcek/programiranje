@@ -1,4 +1,5 @@
 import random
+# TODO: popravi, da se bo lepo končalo
 
 class Igra:
     def __init__(self, sirina, visina):

@@ -46,7 +46,8 @@ class Tetris:
                         text="KONEC IGRE!")
                 self.semafor.delete('all')
                 self.semafor.create_text(170,30,fill="darkblue",font="Times 20 italic bold",
-                        text = "Končni rezultat je: " + str(self.igra.rezultat) + ' točk.')
+                        text = "Končni rezultat je: " + str(self.igra.rezultat)+ ' točk.')
+                self.ustvari_nov_zapis('rezultati.txt')
             else:
                 self.igra.polna_vrstica()
                 self.osvezi_semafor()
@@ -86,7 +87,6 @@ class Tetris:
                 ODMIK + VELIKOST_POLJA * y + VELIKOST_POLJA,
                 fill = "darkgreen"
             )
-            
 
     def obdelaj_tipko(self,event):
         if event.keysym == 'Right':
@@ -118,7 +118,10 @@ class Tetris:
             self.igra.zavrti()
         self.osvezi_prikaz()
 
-
+    def ustvari_nov_zapis(self,datoteka):
+        with open("rezultati.txt", "a") as f:
+            f.write(str(self.igra.rezultat))
+            f.write('\n')
 
 okno = tk.Tk()
 moj_stevec = Tetris(okno)
