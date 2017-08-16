@@ -1,7 +1,4 @@
 import random
-# TO DO: popravi funkcijo self.fiksen()
-# dodaj še trikotno na obe strani in štirki z izrastkom
-
 
 class Igra:
     def __init__(self, sirina, visina):
@@ -90,6 +87,7 @@ class Igra:
     def desno(self):
         if self.prosto_desno() == False:
             print('ne morem v desno')
+            pass
         else:
             tocke = []
             spodnje_tocke = []
@@ -120,6 +118,7 @@ class Igra:
     def levo(self):
         if self.prosto_levo() == False:
             print('ne morem v levo')
+            pass
         else:
             tocke = []
             spodnje_tocke = []
@@ -132,9 +131,9 @@ class Igra:
                 par = (par[0] - 1, par[1])
                 spodnje_tocke.append(par)
             self.spodnje_tocke = spodnje_tocke
-            if igra.fiksen() == True:
-                igra.shrani_kanvas()
-                igra.naredi_nov_objekt()
+            if self.fiksen() == True:
+                self.shrani_kanvas()
+                self.naredi_nov_objekt()
         
     def prosto_levo(self):
         x, y = self.polozaj
@@ -159,21 +158,15 @@ class Igra:
             par = (par[0], par[1] + 1)
             spodnje_tocke.append(par)
         self.spodnje_tocke = spodnje_tocke
-        if self.fiksen() == True:
-            self.rezultat += 10
-            self.shrani_kanvas()
-            self.polna_vrstica()                
-            self.naredi_nov_objekt()
         
     def fiksen(self):
         ja_ne = 0
-        #print(self.spodnje_tocke)
         for tocka in self.spodnje_tocke:            
             if tocka[1] == self.visina - 1 or (tocka[0],tocka[1] + 1) in self.koncne_tocke or ja_ne == 1:
                 ja_ne = 1
+                self.rezultat += 10
                 return True 
-                print(ja_ne)
-            print(ja_ne)
+                break
         if ja_ne == 0:
             return False        
             
@@ -374,9 +367,11 @@ class Igra:
         
     def lahko_zavrtim(self):
         x,y = self.polozaj
-        if self.število == 1: #enka
+        #enka
+        if self.število == 1: 
             return True
-        elif self.število  == 2: #dvojka
+        #dvojka
+        elif self.število  == 2: 
             if self.postavitev % 4 == 0:
                 if self.polozaj[1] < self.visina - 1 and (self.polozaj[0], self.polozaj[1] + 1) not in self.koncne_tocke:
                     return True
@@ -397,8 +392,8 @@ class Igra:
                     return True
                 else:
                     return False
-
-        elif self.število == 3: #trojka
+        #trojka
+        elif self.število == 3: 
             x,y = self.polozaj
             if self.postavitev % 4  == 0:
                 if y < self.visina + 2 and (x, y + 1) not in self.koncne_tocke and (x, y + 2) not in self.koncne_tocke:
@@ -420,8 +415,8 @@ class Igra:
                     return True
                 else:
                     return False
-                                  
-        elif self.število == 4: #štirka
+        #štirka                          
+        elif self.število == 4: 
             if self.postavitev % 4  == 0:
                 if y < self.visina - 4 and (x,y + 1) not in self.koncne_tocke and (x, y + 2) not in self.koncne_tocke and (x,y + 3) not in self.koncne_tocke:
                     return True
@@ -442,11 +437,11 @@ class Igra:
                     return True
                 else:
                     return False
-                                  
-        elif self.število == 5: #kvadrat
+        #kvadrat                          
+        elif self.število == 5: 
             return True
-                                  
-        elif self.število == 6: #kvadrat z izrastkom
+        #kvadrat z izrastkom                          
+        elif self.število == 6: 
             if self.postavitev % 4  == 0:
                 if y <= self.visina - 3 and (x,y + 1) not in self.koncne_tocke and (x, y + 2) not in self.koncne_tocke and (x + 1,y + 1) not in self.koncne_tocke:
                     return True
@@ -467,7 +462,8 @@ class Igra:
                     return True
                 else:
                     return False
-        elif self.število == 7: # mali L v levo
+        # mali L v levo
+        elif self.število == 7: 
             if self.postavitev % 4  == 0:
                 if y < self.visina - 3 and (x,y + 1) not in self.koncne_tocke and (x, y + 2) not in self.koncne_tocke and (x + 1,y + 2) not in self.koncne_tocke:
                     return True
@@ -488,7 +484,8 @@ class Igra:
                     return True
                 else:
                     return False
-        elif self.število == 8: # mali L v levo z izrastkom
+        # mali L v levo z izrastkom
+        elif self.število == 8: 
             if self.postavitev % 4  == 0:
                 if y < self.visina - 3 and (x,y + 1) not in self.koncne_tocke and (x, y + 2) not in self.koncne_tocke and (x + 1,y + 2) not in self.koncne_tocke and (x - 1,y + 1) not in self.koncne_tocke:
                     return True
@@ -509,7 +506,8 @@ class Igra:
                     return True
                 else:
                     return False
-        elif self.število == 9: # mali L v desno
+        # mali L v desno
+        elif self.število == 9: 
             if self.postavitev % 4  == 0:
                 if y < self.visina - 2 and (x,y + 1) not in self.koncne_tocke and (x, y + 2) not in self.koncne_tocke:
                     return True
@@ -530,7 +528,8 @@ class Igra:
                     return True
                 else:
                     return False
-        elif self.število == 10: # mali L v desno z izrastkom
+        # mali L v desno z izrastkom
+        elif self.število == 10: 
             if self.postavitev % 4  == 0:
                 if y < self.visina - 2 and (x,y + 1) not in self.koncne_tocke and (x, y + 2) not in self.koncne_tocke and (x - 1, y + 1) not in self.koncne_tocke:
                     return True
@@ -551,7 +550,8 @@ class Igra:
                     return True
                 else:
                     return False
-        elif self.število == 11: # velik L v levo
+        # velik L v levo
+        elif self.število == 11: 
             if self.postavitev % 4  == 0:
                 if y <= self.visina - 4 and (x,y + 1) not in self.koncne_tocke and (x,y + 2) not in self.koncne_tocke and (x,y + 3) not in self.koncne_tocke and (x + 1,y + 3) not in self.koncne_tocke:
                     return True
@@ -572,7 +572,8 @@ class Igra:
                     return True
                 else:
                     return False
-        elif self.število == 12: # velik L v desno
+        # velik L v desno
+        elif self.število == 12: 
             if self.postavitev % 4  == 0:
                 if y <= self.visina - 4 and (x,y + 1) not in self.koncne_tocke and (x, y + 2) not in self.koncne_tocke and (x, y + 3) not in self.koncne_tocke:
                     return True
@@ -593,7 +594,8 @@ class Igra:
                     return True
                 else:
                     return False
-        elif self.število == 13: # kotna 2
+        # kotna 2
+        elif self.število == 13: 
             if self.postavitev % 4  == 0:
                 if y <= self.visina - 2 and (x,y + 1) not in self.koncne_tocke:
                     return True
@@ -614,7 +616,8 @@ class Igra:
                     return True
                 else:
                     return False
-        elif self.število == 14: # kotna 3
+        # kotna 3
+        elif self.število == 14: 
             if self.postavitev % 4  == 0:
                 if y <= self.visina - 3 and (x,y + 1) not in self.koncne_tocke and (x,y + 2) not in self.koncne_tocke:
                     return True
@@ -672,6 +675,3 @@ class Igra:
         else:
             return False
 
-            
-            
-#igra = Igra(18,30)

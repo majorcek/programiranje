@@ -1,13 +1,12 @@
 import tkinter as tk
 import poskus
 
-# TO DO: števec točk: vsaka kocka 10 točk, podrta vrstica 100 točk
 
 VELIKOST_POLJA = 20
 ODMIK = 5
 
 #koliko korakov naj naredi v sekundi
-HITROST = 1
+HITROST = 3
 
 
 class Tetris:
@@ -17,15 +16,15 @@ class Tetris:
         
         #pripravimo grafični vmesnik
         self.okno = okno
+        self.okno.title("Tetris")
         
         self.semafor = tk.Canvas(
             width = VELIKOST_POLJA * self.igra.sirina + 2 * ODMIK,
             height = 60
-        )
-        self.semafor.create_text(50,50,fill = "darkblue",font = "Times 20 italic bold",
-                        text = 'Trenutni rezultat je 0 točk')
-        
+        )        
         self.semafor.pack()
+        self.semafor.create_text(170,30,fill = "darkblue",font = "Times 20 italic bold",
+                        text = 'Trenutni rezultat je 0 točk')
         
         self.igralna_plosca = tk.Canvas(
             width=VELIKOST_POLJA * self.igra.sirina + 2 * ODMIK,
@@ -39,32 +38,29 @@ class Tetris:
         
                                  
     def osnovna_zanka(self):
-        if self.igra.fiksen() == False:
-            self.premakni()
-            self.osvezi_prikaz()
-            self.okno.after(int(1000 // HITROST), self.osnovna_zanka)
-        else:
+        if self.igra.fiksen() == True:
             self.igra.shrani_kanvas()
             if self.igra.konec() == True:
                 self.igralna_plosca.delete('all')
-                self.igralna_plosca.create_text(100,100,fill="darkblue",font="Times 20 italic bold",
+                self.igralna_plosca.create_text(170,30,fill="darkblue",font="Times 20 italic bold",
                         text="KONEC IGRE!")
+                self.semafor.delete('all')
+                self.semafor.create_text(170,30,fill="darkblue",font="Times 20 italic bold",
+                        text = "Končni rezultat je: " + str(self.igra.rezultat) + ' točk.')
             else:
                 self.igra.polna_vrstica()
                 self.osvezi_semafor()
-                print('!')
-                self.naredi_nov_objekt()    
+                self.igra.naredi_nov_objekt()    
                 self.osvezi_prikaz()
                 self.okno.after(int(1000 // HITROST), self.osnovna_zanka)
+        elif self.igra.fiksen() == False:
+            self.premakni()
+            self.okno.after(int(1000 // HITROST), self.osnovna_zanka)        
      
     def osvezi_semafor(self):
-        #mogoče je treba brez selfa
         self.semafor.delete('all')
-        self.semafor.create_text(30,30,fill = "darkblue",font = "Times 20 italic bold",
-                                 text = 'Trenutni rezultat je: mlkmyxkc')
-        print('?')
-
-                        #text = 'Trenutni rezultat je:' + str(self.igra.rezultat))
+        self.semafor.create_text(170,30,fill = "darkblue",font = "Times 20 italic bold",
+                                 text = 'Trenutni rezultat je: ' + str(self.igra.rezultat) + ' točk')
 
     def osvezi_prikaz(self):
         self.igralna_plosca.delete('all')
@@ -108,17 +104,17 @@ class Tetris:
         self.osvezi_prikaz()
             
     def desno(self):
-        if self.igra.prosto_desno() == True:
+        if self.igra.prosto_desno() == True and self.igra.konec() == False:
             self.igra.desno()
         self.osvezi_prikaz()
         
     def levo(self):
-        if self.igra.prosto_levo() == True:
+        if self.igra.prosto_levo() == True and self.igra.konec() == False:
             self.igra.levo()
         self.osvezi_prikaz()
 
     def zavrti(self):
-        if self.igra.lahko_zavrtim() == True:
+        if self.igra.lahko_zavrtim() == True and self.igra.konec() == False:
             self.igra.zavrti()
         self.osvezi_prikaz()
 
