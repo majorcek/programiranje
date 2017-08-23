@@ -1,12 +1,12 @@
 import tkinter as tk
 import poskus
-
+#todo: pobriši en izpis
 
 VELIKOST_POLJA = 20
 ODMIK = 5
 
 #koliko korakov naj naredi v sekundi
-HITROST = 3
+HITROST = 10
 
 
 class Tetris:
@@ -119,9 +119,37 @@ class Tetris:
         self.osvezi_prikaz()
 
     def ustvari_nov_zapis(self,datoteka):
-        with open("rezultati.txt", "a") as f:
-            f.write(str(self.igra.rezultat))
-            f.write('\n')
+        with open(datoteka, "r+") as f:
+            old = f.readlines()
+            print(len(old),old)
+            stevec = 1
+            seznam = []
+            stevec2 = 0            
+            while stevec2 < len(old):
+                if stevec2 == len(old) - 1:
+                    izzid = int(old[stevec2][4:])
+                else:
+                    izzid = int(old[stevec2][4:-1])
+                seznam.append(izzid)
+                stevec2 += 1
+            seznam.append(self.igra.rezultat)
+            seznam.sort()
+            print(len(seznam),seznam)
+
+            niz = ''
+            while len(seznam) > 0:
+                if stevec // 10 == 0:
+                    niz += ' ' + str(stevec) + "  " + str(seznam[0]) + '\n'
+                else:
+                    niz += '' + str(stevec) + "  " + str(seznam[0]) + '\n'
+                del(seznam[0])
+                stevec += 1
+            #niz[:-2]
+            print(niz[-1])
+            print(niz)
+            with open(datoteka,"w") as t:
+                t.write(niz)
+
 
 okno = tk.Tk()
 moj_stevec = Tetris(okno)
