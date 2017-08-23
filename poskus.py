@@ -28,62 +28,77 @@ class Igra:
         x = 8
         self.polozaj = (x,0)
         self.postavitev = 0
+        #velikost pomeni širino elementa (kocke), velikost2 pa njegovo višino
         if self.število == 1: #enka
             self.tocke = [(x,0)]
             self.velikost = 1
             self.spodnje_tocke = [(x,0)]
+            self.velikost2 = 1
         elif self.število == 2: #dvojka
             self.tocke = [(x,0),(x + 1,0)]
             self.velikost = 2
             self.spodnje_tocke = [(x,0),(x + 1,0)]
+            self.velikost2 = 1
         elif self.število == 3: #trojka
             self.tocke = [(x,0),(x + 1,0),(x + 2,0)]
             self.velikost = 3
             self.spodnje_tocke = [(x,0),(x + 1,0),(x + 2,0)]
+            self.velikost2 = 1
         elif self.število == 4: #štirka
             self.tocke = [(x,0),(x + 1,0),(x + 2,0),(x + 3,0)]
             self.velikost = 4
             self.spodnje_tocke = [(x,0),(x + 1,0),(x + 2,0),(x + 3,0)]
+            self.velikost2 = 1
         elif self.število == 5: #kvadrat
             self.tocke = [(x,1),(x + 1,1),(x,0),(x + 1,0)]
             self.velikost = 2
             self.spodnje_tocke = [(x,1),(x + 1,1)]
+            self.velikost2 = 2
         elif self.število == 6: #kvadrat z izrastkom
             self.tocke = [(x,1),(x + 1,1),(x + 2, 1),(x,0),(x + 1,0)]
             self.velikost = 3
             self.spodnje_tocke = [(x,1),(x + 1,1),(x + 2, 1)]
+            self.velikost2 = 2
         elif self.število == 7: #mali L v levo
             self.tocke = [(x,1),(x + 1,1),(x + 2, 1),(x + 2,0)]
             self.velikost = 3
             self.spodnje_tocke = [(x,1),(x + 1,1),(x + 2, 1)]
+            self.velikost2 = 2
         elif self.število == 8: #mali L v levo z izrastkom
             self.tocke = [(x,1),(x + 1,1),(x + 2, 1),(x + 2,0),(x + 1,2)]
             self.velikost = 3
             self.spodnje_tocke = [(x,1),(x + 1,2),(x + 2, 1)]
+            self.velikost2 = 3
         elif self.število == 9: #mali L v desno
             self.tocke = [(x,1),(x + 1,1),(x + 2, 1),(x,0)]
             self.velikost = 3
             self.spodnje_tocke = [(x,1),(x + 1,1),(x + 2, 1),(x,0)]
+            self.velikost2 = 2
         elif self.število == 10: # mali L v desno z izrastkom
             self.tocke = [(x,1),(x + 1,1),(x + 2, 1),(x,0), (x + 1,2)]
             self.velikost = 3
             self.spodnje_tocke = [(x,1),(x + 1,2),(x + 2, 1)]
+            self.velikost2 = 3
         elif self.število == 11: # velik L v desno 
             self.tocke = [(x,1),(x + 1,1),(x + 2, 1),(x + 3, 1),(x,0)]
-            self.velikost = 3
+            self.velikost = 4
             self.spodnje_tocke = [(x,1),(x + 1,1),(x + 2, 1),(x + 3, 1)]
+            self.velikost2 = 2
         elif self.število == 12: #velik L v levo 
             self.tocke = [(x,1),(x + 1,1),(x + 2, 1),(x + 3, 1),(x,0)]
-            self.velikost = 3
+            self.velikost = 4
             self.spodnje_tocke = [(x,1),(x + 1,1),(x + 2, 1),(x + 3, 1)]
+            self.velikost2 = 2
         elif self.število == 13: #kotna 2
             self.tocke = [(x,1),(x + 1,1),(x,0)]
             self.velikost = 2
             self.spodnje_tocke = [(x,1),(x + 1,1),(x + 2, 1)]
+            self.velikost2 = 2
         elif self.število == 14: #kotna 3
             self.tocke = [(x,2),(x + 1,2),(x + 2, 2),(x,0),(x,1)]
             self.velikost = 3
             self.spodnje_tocke = [(x,2),(x + 1,2),(x + 2, 2)]
+            self.velikost2 = 3
         
     def desno(self):
         if self.prosto_desno() == False:
@@ -665,13 +680,13 @@ class Igra:
                 self.koncne_tocke = koncne_tocke
         
     def konec(self):
-        if (9,0) in self.koncne_tocke:
+        if (8,0) in self.koncne_tocke:
             return True
-        elif (10,0) in self.koncne_tocke and self.velikost == 2:
+        elif (9,0) in self.koncne_tocke and self.velikost >= 2:
             return True
-        elif (11,0) in self.koncne_tocke and self.velikost == 3:
+        elif (10,0) in self.koncne_tocke and self.velikost >= 3:
             return True
-        elif (12,0) in self.koncne_tocke and self.velikost == 4:
+        elif (11,0) in self.koncne_tocke and self.velikost >= 4:
             return True
         else:
             return False
