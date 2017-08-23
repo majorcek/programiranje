@@ -11,7 +11,7 @@ HITROST = 5
 class Tetris:
     def __init__(self, okno):
         #nastavimo model
-        self.igra = poskus.Igra(18,30)
+        self.igra = igra.Igra(18,30)
         
         #pripravimo grafični vmesnik
         self.okno = okno
