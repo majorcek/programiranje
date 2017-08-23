@@ -1,6 +1,5 @@
 import tkinter as tk
-import poskus
-#todo: pobriši en izpis
+import igra
 
 VELIKOST_POLJA = 20
 ODMIK = 5
