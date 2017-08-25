@@ -21,7 +21,6 @@ class Igra:
         self.visina = visina
         self.naredi_nov_objekt()
         self.koncne_tocke = []
-        self.rezultat = 0
 
     def naredi_nov_objekt(self):
         število = random.randrange(1,15)
