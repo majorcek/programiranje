@@ -126,7 +126,7 @@ class Tetris:
                 stevec2 = 0            
                 while stevec2 < len(old):
                     if stevec2 == len(old) - 1:
-                        izzid = int(old[steve5c2][4:])
+                        izzid = int(old[stevec2][4:])
                     else:
                         izzid = int(old[stevec2][4:-1])
                     seznam.append(izzid)
