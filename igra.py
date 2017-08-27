@@ -1,7 +1,7 @@
 import random
 ENKA = '1'
 DVOJKA = '2'
-TROJKA = 3
+TROJKA = '3'
 ŠTIRKA = '4'
 KVADRAT = '5'
 KVADRAT_IZRASTEK = '6'
